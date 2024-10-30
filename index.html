@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>
+      Multi-Dropdown Dashboard with Manual Copy and Random Selection
+    </title>
+    <style>
+      /* Style the compound prompt input area */
+      #compoundPrompt {
+        width: 100%;
+        height: 200px;
+        font-size: 20px;
+        padding: 10px;
+      }
+      .dashboard-tile {
+        margin-bottom: 20px;
+      }
+      label,
+      select,
+      button {
+        font-size: 18px;
+      }
+      #randomizeAllButton {
+        margin-top: 20px;
+        font-size: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="dashboard">
+      <!-- Dashboard Tiles with Dropdowns, Copy, and Random Buttons -->
+      <div class="dashboard-tile" id="tile1">
+        <label for="attributeDropdown1">Choose attribute 1:</label>
+        <select id="attributeDropdown1">
+          <option>Select an attribute</option>
+        </select>
+        <button id="copyButton1">Copy Attribute 1</button>
+        <button id="randomButton1">Select Random</button>
+      </div>
+
+      <div class="dashboard-tile" id="tile2">
+        <label for="attributeDropdown2">Choose attribute 2:</label>
+        <select id="attributeDropdown2">
+          <option>Select an attribute</option>
+        </select>
+        <button id="copyButton2">Copy Attribute 2</button>
+        <button id="randomButton2">Select Random</button>
+      </div>
+
+      <div class="dashboard-tile" id="tile3">
+        <label for="attributeDropdown3">Choose attribute 3:</label>
+        <select id="attributeDropdown3">
+          <option>Select an attribute</option>
+        </select>
+        <button id="copyButton3">Copy Attribute 3</button>
+        <button id="randomButton3">Select Random</button>
+      </div>
+
+      <div class="dashboard-tile" id="tile4">
+        <label for="attributeDropdown4">Choose attribute 4:</label>
+        <select id="attributeDropdown4">
+          <option>Select an attribute</option>
+        </select>
+        <button id="copyButton4">Copy Attribute 4</button>
+        <button id="randomButton4">Select Random</button>
+      </div>
+
+      <div class="dashboard-tile" id="tile5">
+        <label for="attributeDropdown5">Choose attribute 5:</label>
+        <select id="attributeDropdown5">
+          <option>Select an attribute</option>
+        </select>
+        <button id="copyButton5">Copy Attribute 5</button>
+        <button id="randomButton5">Select Random</button>
+      </div>
+
+      <div class="dashboard-tile" id="tile6">
+        <label for="attributeDropdown6">Choose attribute 6:</label>
+        <select id="attributeDropdown6">
+          <option>Select an attribute</option>
+        </select>
+        <button id="copyButton6">Copy Attribute 6</button>
+        <button id="randomButton6">Select Random</button>
+      </div>
+
+      <div class="dashboard-tile" id="tile7">
+        <label for="attributeDropdown7">Choose attribute 7:</label>
+        <select id="attributeDropdown7">
+          <option>Select an attribute</option>
+        </select>
+        <button id="copyButton7">Copy Attribute 7</button>
+        <button id="randomButton7">Select Random</button>
+      </div>
+
+      <div class="dashboard-tile" id="tile8">
+        <label for="attributeDropdown8">Choose attribute 8:</label>
+        <select id="attributeDropdown8">
+          <option>Select an attribute</option>
+        </select>
+        <button id="copyButton8">Copy Attribute 8</button>
+        <button id="randomButton8">Select Random</button>
+      </div>
+
+      <div class="dashboard-tile" id="tile9">
+        <label for="attributeDropdown9">Choose attribute 9:</label>
+        <select id="attributeDropdown9">
+          <option>Select an attribute</option>
+        </select>
+        <button id="copyButton9">Copy Attribute 9</button>
+        <button id="randomButton9">Select Random</button>
+      </div>
+
+      <div class="dashboard-tile" id="tile10">
+        <label for="attributeDropdown10">Choose attribute 10:</label>
+        <select id="attributeDropdown10">
+          <option>Select an attribute</option>
+        </select>
+        <button id="copyButton10">Copy Attribute 10</button>
+        <button id="randomButton10">Select Random</button>
+      </div>
+
+      <!-- Compound Prompt Text Area -->
+      <div class="dashboard-tile">
+        <label for="compoundPrompt">Compound Prompt:</label>
+        <textarea
+          id="compoundPrompt"
+          placeholder="Paste selected attributes here to create your multi-sentence prompt"
+        ></textarea>
+      </div>
+
+      <!-- Randomize All Button -->
+      <button id="randomizeAllButton">Randomize All</button>
+    </div>
+
+    <script>
+      // JSON file paths for each dropdown
+      const jsonFiles = [
+        'attributes1.json',
+        'attributes2.json',
+        'attributes3.json',
+        'attributes4.json',
+        'attributes5.json',
+        'attributes6.json',
+        'attributes7.json',
+        'attributes8.json',
+        'attributes9.json',
+        'attributes10.json',
+      ];
+
+      // Function to populate each dropdown
+      function loadDropdown(dropdownId, jsonFile) {
+        fetch(jsonFile)
+          .then((response) => response.json())
+          .then((data) => {
+            const dropdown = document.getElementById(dropdownId);
+            data.attributes.forEach((attribute) => {
+              const option = document.createElement('option');
+              option.value = attribute;
+              option.textContent = attribute;
+              dropdown.appendChild(option);
+            });
+          })
+          .catch((error) => console.error(`Error loading ${jsonFile}:`, error));
+      }
+
+      // Function to handle copy button action for a specific dropdown
+      function setupCopyButton(buttonId, dropdownId) {
+        document.getElementById(buttonId).addEventListener('click', () => {
+          const dropdown = document.getElementById(dropdownId);
+          const selectedAttribute = dropdown.value;
+          if (
+            selectedAttribute &&
+            selectedAttribute !== 'Select an attribute'
+          ) {
+            navigator.clipboard.writeText(selectedAttribute).catch((err) => {
+              console.error('Failed to copy text: ', err);
+            });
+          } else {
+            console.warn('No attribute selected to copy.');
+          }
+        });
+      }
+
+      // Function to select a random option from a dropdown
+      function selectRandomOption(dropdownId) {
+        const dropdown = document.getElementById(dropdownId);
+        const options = dropdown.options;
+        const randomIndex =
+          Math.floor(Math.random() * (options.length - 1)) + 1;
+        dropdown.selectedIndex = randomIndex;
+      }
+
+      // Load each dropdown, setup copy, and random buttons
+      for (let i = 0; i < jsonFiles.length; i++) {
+        const dropdownId = `attributeDropdown${i + 1}`;
+        const buttonId = `copyButton${i + 1}`;
+        const randomButtonId = `randomButton${i + 1}`;
+
+        loadDropdown(dropdownId, jsonFiles[i]);
+        setupCopyButton(buttonId, dropdownId);
+
+        document
+          .getElementById(randomButtonId)
+          .addEventListener('click', () => {
+            selectRandomOption(dropdownId);
+          });
+      }
+
+      // Setup Randomize All button to select random options in all dropdowns
+      document
+        .getElementById('randomizeAllButton')
+        .addEventListener('click', () => {
+          for (let i = 1; i <= 10; i++) {
+            selectRandomOption(`attributeDropdown${i}`);
+          }
+        });
+    </script>
+  </body>
+</html>
